@@ -1,0 +1,6 @@
+# Tells Jekyll not to apply any theme or plugin transformations
+# to this minimal redirect site.
+theme: null
+plugins: []
+exclude:
+  - README.md

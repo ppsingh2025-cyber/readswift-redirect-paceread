@@ -2,10 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
+  <!-- ── CACHE PREVENTION ─────────────────────────────────────────────────
+       GitHub Pages does not allow custom HTTP headers, so these meta tags
+       are the only available mechanism to signal no-cache to the browser.
+       They are respected by Chrome on Android and Firefox on all platforms.
+       iOS Safari bfcache is handled separately via the pageshow listener.
+  ──────────────────────────────────────────────────────────────────────── -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <!-- ── FALLBACK: meta-refresh for no-JS environments ── -->
   <meta http-equiv="refresh" content="0; url=https://paceread.techscript.ca" />
+
   <link rel="canonical" href="https://paceread.techscript.ca" />
   <title>Redirecting to PaceRead</title>
   <meta name="robots" content="noindex, follow" />
+
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -21,6 +35,28 @@
   </style>
 </head>
 <body>
-  <p>Redirecting to <a href="https://paceread.techscript.ca">PaceRead</a></p>
+  <p>Redirecting to <a href="https://paceread.techscript.ca">PaceRead</a>&hellip;</p>
+
+  <script>
+    (function () {
+      var DEST = "https://paceread.techscript.ca";
+
+      // Primary redirect — fires before page is fully painted.
+      // replace() avoids adding this page to browser history,
+      // preventing back-button loops.
+      window.location.replace(DEST);
+
+      // iOS Safari bfcache guard.
+      // Safari can restore this page from in-memory bfcache,
+      // bypassing all network requests and all meta tags.
+      // The pageshow event fires on every restore; event.persisted
+      // is true only when the page comes from bfcache.
+      window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+          window.location.replace(DEST);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
